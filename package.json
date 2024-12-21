@@ -10,10 +10,14 @@
     "format:fix": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
   },
   "dependencies": {
-    "next": "15.1.0",
+    "jade": "^0.29.0",
+    "modal": "^0.2.0",
+    "next": "^15.1.2",
     "prettier": "^3.4.2",
+    "pug": "^3.0.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "torch": "^0.2.7"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

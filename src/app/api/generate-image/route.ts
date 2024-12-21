@@ -1,20 +1,42 @@
 import { NextResponse } from "next/server";
 
+const MODAL_API_URL = "https://pentagram.modal.run/generate";
+
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { text } = body;
+    const { prompt } = await request.json();
 
-    // TODO: Call your Image Generation API here
-    // For now, we'll just echo back the text
+    if (!prompt) {
+      return NextResponse.json(
+        { error: "Prompt is required" },
+        { status: 400 }
+      );
+    }
 
-    return NextResponse.json({
-      success: true,
-      message: `Received: ${text}`,
+    console.log("Sending prompt to Modal:", prompt); // Debug log
+
+    const response = await fetch(MODAL_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify({ prompt }),
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Modal API error:", errorText); // Debug log
+      throw new Error(`Failed to generate image: ${errorText}`);
+    }
+
+    const data = await response.json();
+    return NextResponse.json({ imageUrl: data.imageUrl });
+
   } catch (error) {
+    console.error("Error generating image:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to process request" },
+      { error: "Failed to generate image" },
       { status: 500 }
     );
   }
